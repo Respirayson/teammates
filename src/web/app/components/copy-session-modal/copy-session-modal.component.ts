@@ -24,8 +24,13 @@ export class CopySessionModalComponent {
 
   newFeedbackSessionName: string = '';
   copyToCourseSet: Set<string> = new Set<string>();
+  originalSessionName: string = '';
 
   constructor(public activeModal: NgbActiveModal) {}
+
+  ngOnInit(): void {
+    this.originalSessionName = this.newFeedbackSessionName;
+  }
 
   /**
    * Fires the copy event.
@@ -44,8 +49,14 @@ export class CopySessionModalComponent {
   select(courseId: string): void {
     if (this.copyToCourseSet.has(courseId)) {
       this.copyToCourseSet.delete(courseId);
+      if (courseId === this.sessionToCopyCourseId) {
+        this.newFeedbackSessionName = this.originalSessionName;
+      }
     } else {
       this.copyToCourseSet.add(courseId);
+      if (courseId === this.sessionToCopyCourseId) {
+        this.newFeedbackSessionName = `Copy of ${this.originalSessionName}`;
+      }
     }
   }
 }
